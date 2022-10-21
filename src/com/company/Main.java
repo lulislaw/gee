@@ -10,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.net.URL;
+import java.util.Arrays;
 
 import static org.apache.poi.ooxml.POIXMLDocument.DOCUMENT_CREATOR;
 
@@ -31,14 +32,13 @@ public class Main {
         waytosavesource[1] = "C:/excelfiles/bak2.xlsx";
         waytosavesource[2] = "C:/excelfiles/bak3.xlsx";
         waytosavesource[3] = "C:/excelfiles/bak4.xlsx";
-        url[0] = "https://guu.ru/wp-content/uploads/1-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-36.xlsx";
-        url[1] = "https://my.guu.ru/student/messages/get-file?file=b94bacc0de5b0a160eba2d3fc4c106931b1e7247&msg=hJfnCZxiPxnxQAwoor1bk8FUFjDBRBn8";
-        url[2] = "https://guu.ru/wp-content/uploads/3-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-39.xlsx";
-        url[3] = "https://guu.ru/wp-content/uploads/4-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-31.xlsx";
+        url[0] = "https://guu.ru/wp-content/uploads/1-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-37.xlsx";
+        url[1] = "https://guu.ru/wp-content/uploads/2-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-37.xlsx";
+        url[2] = "https://guu.ru/wp-content/uploads/3-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-40.xlsx";
+        url[3] = "https://guu.ru/wp-content/uploads/4-%D0%BA%D1%83%D1%80%D1%81-%D0%B1%D0%B0%D0%BA%D0%B0%D0%BB%D0%B0%D0%B2%D1%80%D0%B8%D0%B0%D1%82-%D0%9E%D0%A4%D0%9E-32.xlsx";
         for (int i = 0; i < items; i++) {
             try {
                 downloadUsingStream(url[i], waytosavesource[i]);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -65,22 +65,34 @@ public class Main {
 
                     Sheet sheet = wbsource.getSheetAt(s);
                     for (int c = 4; c < 60; c++) {
-                    for (int r = 8; r < 60; r++) {
+                        for (int r = 8; r < 60; r++) {
 
                             ;
 
                             try {
                                 if (sheet.getRow(r).getCell(c).toString() != null) {
-                                    if(sheet.getRow(r).getCell(c).toString().length() > 2 && !sheet.getRow(r).getCell(c).toString().contains("Директор") && !string.contains(sheet.getRow(r).getCell(c).toString()
+                                    if (sheet.getRow(r).getCell(c).toString().length() > 2 && !sheet.getRow(r).getCell(c).toString().contains("Директор") && !string.contains(sheet.getRow(r).getCell(c).toString()
                                             + "Y" + sheet.getRow(r).getCell(3).toString()
                                             + "Y" + sheet.getRow(r).getCell(2).toString()
                                             + "Y" + sheet.getRow(r).getCell(1).toString()
-                                            + "Y" + "Курс-" + (b+1)))
-                                    string = string + "\nX\n" + sheet.getRow(r).getCell(c).toString()
-                                            + "Y" + sheet.getRow(r).getCell(3).toString()
-                                            + "Y" + sheet.getRow(r).getCell(2).toString()
-                                            + "Y" + sheet.getRow(r).getCell(1).toString()
-                                            + "Y" + "Курс-" + (b+1) + "Y";
+                                            + "Y" + "Курс-" + (b + 1))) {
+                                        string = string + "\nX\n" + sheet.getRow(r).getCell(c).toString()
+                                                + "Y" + sheet.getRow(r).getCell(3).toString()
+                                                + "Y" + sheet.getRow(r).getCell(2).toString()
+                                                + "Y" + sheet.getRow(r).getCell(1).toString()
+                                                + "Y" + "Курс-" + (b + 1) + "Y";
+                                        if (sheet.getRow(r).getCell(c).toString().contains("(Л")) {
+                                            string = string + "Лекция" + "Y";
+                                        } else {
+                                            string = string + "ЛЗ/ПЗ" + "Y";
+                                        }
+
+                                        if (sheet.getRow(r).getCell(3).toString().contains("НЕЧЁТ")) {
+                                            string = string + "Нечётная" + "Y";
+                                        } else {
+                                            string = string + "Четная" + "Y";
+                                        }
+                                    }
                                 }
 
                             } catch (Exception e) {
@@ -105,19 +117,15 @@ public class Main {
         }
 
 
-
-
     }
 
     private static void convertexcel(String source, String endway) throws IOException {
-
         InputStream fs = new FileInputStream(source);
         XSSFWorkbook wb = new XSSFWorkbook(fs);
         Sheet[] sheets = new Sheet[wb.getNumberOfSheets()];
         for (int s = 0; s < wb.getNumberOfSheets(); s++) {
             Sheet sheet = wb.getSheetAt(s);
             try {
-
                 int lenmergedregion = sheet.getMergedRegions().size();
                 int[] CellStart = new int[lenmergedregion];
                 int[] CellEnd = new int[lenmergedregion];
@@ -156,19 +164,15 @@ public class Main {
                     sheet.removeMergedRegion(i);
                 }
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         }
-
         try (OutputStream fileOut = new FileOutputStream(endway)) {
             wb.write(fileOut);
         }
-        wb.close();
 
+        wb.close();
     }
 
     private static void downloadUsingStream(String urlStr, String file) throws IOException {
